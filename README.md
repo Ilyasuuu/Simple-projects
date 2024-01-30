@@ -1,6 +1,23 @@
 # Simple-projects
 calculator2.py
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 def add(*numbers):
     return sum(numbers)
 
