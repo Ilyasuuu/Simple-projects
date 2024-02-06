@@ -57,15 +57,61 @@ class FinanceTracker:
             print(f"{transaction.date}\t{transaction.type}\t{transaction.amount}\t{running_balance}\t{transaction.description}")
 
 
+    # Method to interact with the user in the terminal to add a new transaction
     def add_transaction_ui(self):
-    # Example of user input for a transaction
+            # Prompt the user to enter the transaction amount and convert it to a float
         amount = float(input("Amount: "))
+            
+            # Prompt the user to enter the date in YYYY-MM-DD format
         date_str = input("Date (YYYY-MM-DD): ")
+            # Convert the string date to a datetime.date object
         date = datetime.datetime.strptime(date_str, "%Y-%m-%d").date()
+            
+            # Prompt the user to specify the transaction type (income or expense)
         type = input("Type (income/expense): ")
+       
+            # Prompt the user to provide a short description of the transaction
         description = input("Description: ")
+            
+            # Create a new Transaction object with the user-provided details
+            # and add it to the tracker
         self.add_transaction(Transaction(amount, date, type, description))
 
+    
+
+
+def main():
+    tracker = FinanceTracker()
+    while True:
+            # Print the main menu
+            print("\nMain Menu:")
+            print("1. Add Income")
+            print("2. Add Expense")
+            print("3. Show Transactions")
+            print("4. Show Balance")
+            print("5. Exit")
+            
+            # Get the user's choice
+            choice = input("Choose an action: ")
+            
+            # Handle the user's choice
+            if choice == '1':
+                tracker.add_transaction_ui()  # Assume income type is handled within
+            elif choice == '2':
+                tracker.add_transaction_ui()  # Assume expense type is handled within
+            elif choice == '3':
+                tracker.show_transaction()
+            elif choice == '4':
+                print(f"Current Balance: {tracker.get_balance()}")
+            elif choice == '5':
+                print("Exiting...") # Exit the program 
+                
+            else:
+                print("Invalid choice, please try again.")
+                
+
+if __name__ == "__main__":
+    main()
 
 finance_tracker = FinanceTracker()  # Create an instance of the FinanceTracker class
 finance_tracker.add_transaction_ui()  # Call the add_transaction_ui() method on the instance
