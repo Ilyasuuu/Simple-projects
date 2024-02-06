@@ -105,7 +105,7 @@ def main():
                 print(f"Current Balance: {tracker.get_balance()}")
             elif choice == '5':
                 print("Exiting...") # Exit the program 
-                
+
             else:
                 print("Invalid choice, please try again.")
                 
@@ -113,5 +113,5 @@ def main():
 if __name__ == "__main__":
     main()
 
-finance_tracker = FinanceTracker()  # Create an instance of the FinanceTracker class
-finance_tracker.add_transaction_ui()  # Call the add_transaction_ui() method on the instance
+#finance_tracker = FinanceTracker()  # Create an instance of the FinanceTracker class
+#finance_tracker.add_transaction_ui()  # Call the add_transaction_ui() method on the instance
