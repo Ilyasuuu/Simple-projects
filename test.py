@@ -46,8 +46,8 @@ class Character:
             return self.choose_action()
 # We'll make the combat turn-based, where the hero and the monster take turns to perform actions. This introduces the concept of state management within objects.    
     def take_damage(self, damage):
-        self.__health -= damage 
-        print(f"{self.__name} had taken {damage} damage and has {self.__health} health left.")   
+        self.__health -= 20 
+        print(f"{self.__name} had taken {20} damage and has {self.__health} health left.")   
 
 class Inventory: #Composition another concept of OOP,  where a class is composed of one or more objects from other classes, indicating a "has-a" relationship. This is useful for creating complex objects that are made up of other objects.
     def __init__(self):
@@ -104,8 +104,8 @@ class Monster:
             return self.choose_action()
 
     def take_damage(self, damage):
-        self.__health -= damage
-        print(f"{self.__name} has taken {damage} damage and has {self.__health} health left.")
+        self.__health -= 50
+        print(f"{self.__name} has taken {50} damage and has {self.__health} health left.")
 
 
 # inheritance : The Wizard class inherits all attributes and methods from Character but also adds a new method, cast_spell.
@@ -129,23 +129,25 @@ def simulate_combat(hero, monster):
     turn = 0  # Even numbers for hero's turn, odd for monster's turn
     while hero.get_health() > 0 and monster.get_health() > 0:
         if turn % 2 == 0:  # Hero's turn
-            print("\nHero's turn:")
+            print(f"\n{hero.get_name()}'s turn:")
             hero_action = hero.choose_action()
             if hero_action == "attack":
                 monster.take_damage(hero.get_strength())
+                print(f"{monster.get_name()} has {monster.get_health()} health left.")
         else:  # Monster's turn
-            print("\nMonster's turn:")
+            print(f"{monster.get_name()}'s turn:")
             monster_action = monster.choose_action()
             if monster_action == "attack":
                  hero.take_damage(monster.get_strength())
+                 print(f"{hero.get_name()} has {hero.get_health()} health left")
                 
         turn += 1
 
     # Determine winner
     if hero.get_health() > 0:
-        print("\nThe hero has triumphed!")
+        print(f"\n{hero.get_name()} has triumphed!")
     else:
-        print("\nThe monster has won!")
+        print(f"\n{monster.get_name()} has won!")
 
 
 # changing the instance to the wizard class # if i don't there is no overriding.
