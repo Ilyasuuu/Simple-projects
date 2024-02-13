@@ -53,7 +53,23 @@ class Monster:
 
     def take_damage(self, damage):
         self.health -= damage
-        print(f"{self.name} has taken {damage} damage and has {self.health} health left.")        
+        print(f"{self.name} has taken {damage} damage and has {self.health} health left.")
+
+
+# inheritance : The Wizard class inherits all attributes and methods from Character but also adds a new method, cast_spell.
+# Polymorphism: allows objects of different classes to be treated as objects of a common superclass. maybe i will override a the existing method by a new one
+class Wizard(Character):
+    def cast_spell(self):
+        print(f"{self.name} casts a powerful spell ")
+    
+    def attack(self):
+        self.cast_spell() # ovverides the attack method
+class Final_Boss(Monster):
+    def cast_spell(self):
+        print(f"{self.name} casts a cursing spell ") #lol  
+
+    def attack(self):
+        self.cast_spell()
 
 # For simplicity, let's assume each attack action reduces the opponent's health by a fixed amount. We'll simulate a round of combat to illustrate the concept.
 
@@ -80,11 +96,11 @@ def simulate_combat(hero, monster):
         print("\nThe monster has won!")
 
 
+# changing the instance to the wizard class # if i don't there is no overriding.
+hero = Wizard('Ilyas', 100, 50)
+monster = Final_Boss('Zac', 200, 100)
 
-hero = Character('Ilyas', 100, 50)
-monster = Monster('Zac', 200, 100)
 
-simulate_combat(hero, monster)
 hero_action = hero.choose_action()
 monster_action = monster.choose_action()
-
+simulate_combat(hero, monster)
