@@ -32,9 +32,9 @@ def encounter_treasure(name):
 
 #
 def encounter_monster(name):
-    monster = random.choice(['dragon', 'friendly dragon', 'pirate'])
+    monster = random.choice(['a dragon', 'an ogre', 'a pirate'])
     print(f"Oh no, {name} You've encountered a {monster}!")    
-    
+    face_monster(name, monster, inventory)
 
 #
 def enter_forest(name, inventory):
@@ -52,7 +52,20 @@ def enter_forest(name, inventory):
         print("You can lose your diamonds, if I were you I won't go!!") 
         end_game(name)               
 
-
+#
+def face_monster(name, monster, inventory):
+    print(f"{name} is facing {monster}")
+    user = input(f"Do you want to turn back or keep going? (yes/no): ").lower()
+    if user == 'yes':
+        print(f"You were defeated by {monster} because you did not have naything to fight with.")
+        end_game(name)
+    else:
+        print(f"Good choice {name}.")
+        decision = input('Do you want to go home or go back and take other direction? (home/take_other_direction): ').lower()
+        if decision == 'home':
+            end_game(name)
+        else:
+            encounter_treasure(name)    
 
 
 
