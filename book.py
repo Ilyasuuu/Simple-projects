@@ -12,6 +12,7 @@
 
 
 #check if library.json exists:
+from gettext import find
 import os
 import json
 from turtle import title
@@ -134,3 +135,46 @@ while True:
         break
     else:
         print('Invalid input. Please try again.')
+
+def find_book():
+    print("Search by: [1] Title, [2] Author, [3] Genre, [4] Publish Date")
+    choice = input("Choose a search criterion: ")
+    search_term = input("Enter search term: ")
+
+    # Filter books based on the chosen criterion and search term
+    if choice == '1':
+        matched_books = [book for book in books if search_term.lower() in book.title.lower()]
+    elif choice == '2':
+        matched_books = [book for book in books if search_term.lower() in book.author.lower()]
+    elif choice == '3':
+        matched_books = [book for book in books if search_term.lower() in book.genre.lower()]
+    elif choice == '4':
+        matched_books = [book for book in books if search_term in book.publish_date]
+    else:
+        print("Invalid choice.")
+        return
+
+    if matched_books:
+        print("Found the following books:")
+        for book in matched_books:
+            print(book.book_info())
+    else:
+        print("No books matched your search.")
+
+def sort_books():
+    print("Sort by: [1] Title, [2] Author")
+    choice = input("Choose a sort criterion: ")
+
+    if choice == '1':
+        sorted_books = sorted(books, key=lambda book: book.title.lower())
+    elif choice == '2':
+        sorted_books = sorted(books, key=lambda book: book.author.lower())
+    else:
+        print("Invalid choice.")
+        return
+
+    print("Books sorted:")
+    for book in sorted_books:
+        print(book.book_info())
+
+
