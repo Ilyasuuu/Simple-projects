@@ -17,6 +17,8 @@ import json
 from turtle import title
 
 
+books = []
+
 if not os.path.exists('library.json'): 
     books = []
 else:
@@ -33,6 +35,10 @@ else:
 
 
 
+
+
+
+
 #Save books:
 def save_books(books, filename='library.json'):
     with open(filename, 'w') as file:
@@ -45,8 +51,7 @@ def save_books(books, filename='library.json'):
 
 
 
-
-
+#Book class:
 class Book:
     def __init__(self, title, author, publish_date, pages, summary, genre='General', tags=None):
         self.title = title
@@ -88,4 +93,44 @@ class Book:
             tags = data.get(['tags',[]])
         )
 
-            
+def add_book():
+    title = input('Enter the title of the book: ')
+    author = input('Enter the author of the book: ')
+    publish_date = input('Enter the publish date of the book: ')
+    pages = input('Enter the number of pages of the book: ')
+    summary = input('Enter the summary of the book: ')
+    genre = input('Enter the genre of the book: ')
+    tags = input('Enter the tags of the book: ').split(',')
+    #create a new book object
+    new_book = Book(title, author, publish_date, pages, summary, genre, tags)
+    #add the new book to the list of books
+    books.append(new_book)
+    #save the books to the library.json file
+    save_books(books)
+
+    print(f'Book {title} by {author} has been added to the library.')       
+
+
+def display_books():
+    if not books: # Check if the list of books is empty
+        print('No books in the library.')
+    else:    
+        for book in books:
+            print(book.book_info())
+            print('-' * 20) # Add a separator between books
+
+
+while True:
+    print("Welcome to the library!")
+    print("Options: [1] Add a book, [2] Display all books, [3] Exit")
+    choice = input("Enter your choice: ")
+
+    if choice == '1':
+        add_book()
+    elif choice == '2':
+        display_books()
+    elif choice == '3':
+        print('Goodbye!')
+        break
+    else:
+        print('Invalid input. Please try again.')
