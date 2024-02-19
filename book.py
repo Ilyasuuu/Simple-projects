@@ -12,12 +12,11 @@
 
 
 #check if library.json exists:
-from gettext import find
-from math import e
+
 import os
 import json
 from random import choice
-from turtle import title
+
 
 
 books = []
@@ -198,7 +197,7 @@ def delete_book():
 
 while True:
     print("Welcome to the library!")
-    choice = input("Choose an option: [1] Add a book, [2] Display books, [3] Find a book, [4] Sort books, [5] Edit a book, [6] Delete a book, [7] Quit: ")
+    choice = input("Choose an option: [1] Add a book, [2] Display books, [3] Find a book,\n [4] Sort books, [5] Edit a book, [6] Delete a book,\n [7] Quit: ")
     if choice == '1':
         add_book()
     elif choice == '2':
