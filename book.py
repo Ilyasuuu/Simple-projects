@@ -13,8 +13,10 @@
 
 #check if library.json exists:
 from gettext import find
+from math import e
 import os
 import json
+from random import choice
 from turtle import title
 
 
@@ -121,21 +123,6 @@ def display_books():
             print('-' * 20) # Add a separator between books
 
 
-while True:
-    print("Welcome to the library!")
-    print("Options: [1] Add a book, [2] Display all books, [3] Exit")
-    choice = input("Enter your choice: ")
-
-    if choice == '1':
-        add_book()
-    elif choice == '2':
-        display_books()
-    elif choice == '3':
-        print('Goodbye!')
-        break
-    else:
-        print('Invalid input. Please try again.')
-
 def find_book():
     print("Search by: [1] Title, [2] Author, [3] Genre, [4] Publish Date")
     choice = input("Choose a search criterion: ")
@@ -178,3 +165,54 @@ def sort_books():
         print(book.book_info())
 
 
+def edit_book():
+    title = input("Enter the title of the book to edit: ")
+    found = False
+    for book in books:
+        if book.title.lower() == title.lower():
+            print("Book found. Enter new details:")
+            book.title = input("Enter new title: ")
+            book.author = input("Enter new author: ")
+            book.publish_date = input("Enter new publish date: ")
+            book.pages = int(input("Enter new number of pages: "))
+            book.summary = input("Enter new summary: ")
+            book.genre = input("Enter new genre: ")
+            book.tags = input("Enter new tags: ").split(',')
+            print("Book details updated.")
+            save_books(books)
+            found = True
+            break
+        if not found:
+            print("Book not found.")
+
+def delete_book():
+    title = input("Enter the title of the book to delete: ")
+    for i, book in enumerate(books):
+        if book.title.lower() == title.lower():
+            del books[i]
+            print("Book deleted.")
+            save_books(books)
+            break
+    else:
+        print("Book not found.")            
+
+while True:
+    print("Welcome to the library!")
+    choice = input("Choose an option: [1] Add a book, [2] Display books, [3] Find a book, [4] Sort books, [5] Edit a book, [6] Delete a book, [7] Quit: ")
+    if choice == '1':
+        add_book()
+    elif choice == '2':
+        display_books()
+    elif choice == '3':
+        find_book()
+    elif choice == '4':
+        sort_books()
+    elif choice == '5':
+        edit_book()
+    elif choice == '6':
+        delete_book()
+    elif choice == '7':
+        print("Goodbye!")
+        break
+    else:
+        print("Invalid input. Please try again.")        
