@@ -14,11 +14,12 @@
 import random
 
 
+
 class Hero:
     """Represents the game's hero, with a name, inventory, and current location."""
     def __init__(self, name):
         self.name = name
-        self.location =  None     #Will be updated to start location.
+        self.location = None      #Will be updated to start location.
         self.inventory = []         #Will store keys.
 
 
@@ -121,12 +122,13 @@ class Game:
     def setup_connections(self):
         """Create connections between locations."""
         self.locations["Hero's Village"].add_neighbor("north", self.locations["Dark Village"])
-        self.locations["Dark Village"].add_neighbor("north", self.locations["Dracula's Castle"])
-        self.locations["Dracula's Castle"].add_neighbor("south", self.locations["Dark Village"])
-        self.locations["Dracula's Castle"].add_neighbor("west", self.locations["Haunted Forest"])
-        self.locations["Haunted Forest"].add_neighbor("east", self.locations["Dracula's Castle"])
-        self.locations["Haunted Forest"].add_neighbor("north", self.locations["Graveyard"])
-        self.locations["Graveyard"].add_neighbor("south", self.locations["Haunted Forest"])
+        self.locations["Dark Village"].add_neighbor("south", self.locations["Hero's Village"])
+        self.locations["Hero's Village"].add_neighbor("west", self.locations["Dracula's Castle"])
+        self.locations["Dracula's Castle"].add_neighbor("east", self.locations["Hero's Village"])
+        self.locations["Hero's Village"].add_neighbor("east", self.locations["Haunted Forest"])
+        self.locations["Haunted Forest"].add_neighbor("west", self.locations["Hero's Village"])
+        self.locations["Hero's Village"].add_neighbor("south", self.locations["Graveyard"])
+        self.locations["Graveyard"].add_neighbor("north", self.locations["Hero's Village"])
                                                                                                             #D.V
     
     #Create hero and start in his current village:
@@ -137,10 +139,66 @@ class Game:
         self.hero.location = self.locations["Hero's Village"] 
         print(f"{self.hero.name}, your journey begins in your home village.")
         print(f"Are you ready {self.hero.name} to gather the 4 keys to unlock the cure for your mom's illness?")
-        print(f"Well, Safe travels! {self.hero.name}!")    
+        print(f"Well, Safe travels! {self.hero.name}!")
 
     
-#test the game:
-Game()         
+    def start(self):
+        """Starts the main game loop."""
+        while True:
+            if self.hero and self.hero.location:
+                print("\nCurrent Location:", self.hero.location.name)
+                actions = ["move", "inventory", "quit"]
+                if self.hero.location.riddles:
+                    actions.insert(1, "solve riddle")  # Add solving riddle option if the location has riddles
+            else:
+                print("Hero or location is not initialized.")
 
+            print("Available actions:", ', '.join(actions))
+            action = input("What would you like to do? ").lower().strip()
 
+            if action == "move":
+                self.handle_move()
+            elif action == "solve riddle":
+                self.handle_solve_riddle()    
+            elif action == "inventory":
+                self.show_inventory()
+            elif action == "quit":
+                print("Thanks for playing!")
+                break
+            else:
+                print("Not a valid action. Please try again.")
+        
+    def handle_move(self):
+        """Handles the hero's movement from one location to another."""
+        if self.hero:
+            direction = input("Which direction? [north, south, east, west] ").lower().strip()
+            self.hero.move(direction)
+        else:
+            print("Hero is not initialized.")
+
+    def handle_solve_riddle(self):
+        """Handles the logic for solving a riddle at the current location."""
+        if self.hero and self.hero.location and self.hero.location.riddles:
+            
+            riddle = random.choice(self.hero.location.riddles)  
+            print("Riddle:", riddle.question)
+            answer = input("Answer: ").strip().lower()
+            if answer == riddle.answer.lower():
+                print("Correct! The way forward is clear.")
+            else:
+                print("That's not right. The path remains blocked.")
+        else:
+            print("There are no riddles to solve here.")
+      
+
+    def show_inventory(self):
+        """Displays the hero's current inventory."""
+        if self.hero and self.hero.inventory:
+            print("Inventory:", ", ".join(self.hero.inventory))
+        else:
+            print("Your inventory is empty.")
+
+       
+
+game = Game()
+game.start()
