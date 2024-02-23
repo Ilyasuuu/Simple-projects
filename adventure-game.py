@@ -12,7 +12,7 @@
     #(to store keys) and methods to move between locations.
 
 import random
-
+import time
 
 
 class Hero:
@@ -58,12 +58,21 @@ class Location:
     def __init__(self, name, riddles):
         self.name = name
         self.riddles = riddles      #This will be a list of riddle objects.
-        self.neighbors = {}         #New attribute for neighboring locations.
-    
+        self.neighbors = {}
+        self.failures = 0           #New attribute for neighboring locations.
+        self.lockout_time = 0          
+
     def add_neighbor(self, direction, neighbor):
         """Adds a neighboring location with the associated direction."""
         self.neighbors[direction] = neighbor
         
+    def is_locked(self):
+        if self.lockout_time and time.time() < self.lockout_time:
+            return True
+        return False
+    
+    def lockout(self):
+        self.lockout_time = time.time() + 300  # Lockout for 5 minutes
 
 
 class Riddle:
