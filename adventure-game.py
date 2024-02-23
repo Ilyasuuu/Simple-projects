@@ -17,9 +17,10 @@ import time
 
 class Hero:
     """Represents the game's hero, with a name, inventory, and current location."""
+
     def __init__(self, name):
         self.name = name
-        self.location = None      #Will be updated to start location.
+        self.location = None             #Will be updated to start location.
         self.inventory = []         #Will store keys.
 
 
@@ -60,7 +61,7 @@ class Location:
         self.riddles = riddles      #This will be a list of riddle objects.
         self.neighbors = {}
         self.failures = 0           #New attribute for neighboring locations.
-        self.lockout_time = 0          
+        self.lockout_time = None         
 
     def add_neighbor(self, direction, neighbor):
         """Adds a neighboring location with the associated direction."""
@@ -74,6 +75,7 @@ class Location:
     def lockout(self):
         self.lockout_time = time.time() + 300  # Lockout for 5 minutes
 
+    
 
 class Riddle:
     """Represents a single riddle with a question and an answer."""
@@ -185,19 +187,60 @@ class Game:
         else:
             print("Hero is not initialized.")
 
+    
+    
+                
     def handle_solve_riddle(self):
-        """Handles the logic for solving a riddle at the current location."""
-        if self.hero and self.hero.location and self.hero.location.riddles:
-            
-            riddle = random.choice(self.hero.location.riddles)  
-            print("Riddle:", riddle.question)
-            answer = input("Answer: ").strip().lower()
-            if answer == riddle.answer.lower():
-                print("Correct! The way forward is clear.")
-            else:
-                print("That's not right. The path remains blocked.")
-        else:
-            print("There are no riddles to solve here.")
+        """Handles the logic for solving a riddle at the current location."""    
+        if self.hero is None:
+            print("Hero is not initialized.")
+            return
+
+        location = self.hero.location
+        if location is not None and location.is_locked():
+            print("This location is temporarily locked. Please wait.")
+            return
+
+        correct_answers = 0
+        while correct_answers < 5 and location and location.riddles:
+            if location is not None and location.riddles:
+                riddle = random.choice(location.riddles)
+                print(f"Riddle: {riddle.question}")
+                answer = input("Your answer: ").strip().lower()
+
+                if answer == riddle.answer.lower():
+                    print("Correct!")
+                    correct_answers += 1
+                    if location is not None:
+                        location.riddles.remove(riddle)  # Optionally remove the riddle if it shouldn't be asked again
+                else:
+                    print("Incorrect.")
+                    if location is not None:
+                        location.failures += 1
+                        if location.failures == 3:
+                            print("Too many wrong answers. This location is temporarily locked.")
+                            location.lockout()
+                            break  # Exit the riddle challenge due to too many failures
+
+            if correct_answers == 5:
+                print("Congratulations! You've solved all the riddles in this location.")
+                self.hero.inventory.append(location.key)  # Add the key to the hero's inventory
+                print(f"You've received the key: {location.key}")
+                # Here, you can handle unlocking a new location or awarding the player
+
+        if self.hero and self.hero.location:
+            actions = ["move", "inventory", "quit"]
+            if self.hero.location.riddles:
+                actions.insert(1, "solve riddle")  # Add solving riddle option if the location has riddles
+            print("Available actions:", ', '.join(actions))
+    
+    
+
+
+
+
+                
+
       
 
     def show_inventory(self):
