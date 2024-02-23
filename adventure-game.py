@@ -98,16 +98,16 @@ class Game:
 
     def create_riddles(self):
         """Generates a set of riddles for the game."""
-        self.riddles = [Riddle("What has keys but can't open locks?", "A piano"),
-                    Riddle("What has a head and a tail, but no body?", "A coin"),
-                    Riddle("What has a neck but no head?", "A bottle"),
-                    Riddle("What has a thumb and four fingers but is not alive?", "A glove"),
-                    Riddle("What has a bottom at the top?", "A leg"),
-                    Riddle("What has a ring but no finger?", "A telephone"),
-                    Riddle("What has a foot but no legs?", "A snail"),
-                    Riddle("What has a heart that doesn't beat?", "A artichoke"),
-                    Riddle("What has a bed but never sleeps?", "A river"),
-                    Riddle("What has a face that doesn't frown?", "A clock"),]
+        self.riddles = [Riddle("What has keys but can't open locks?", "piano"),
+                    Riddle("What has a head and a tail, but no body?", "coin"),
+                    Riddle("What has a neck but no head?", "bottle"),
+                    Riddle("What has a thumb and four fingers but is not alive?", "glove"),
+                    Riddle("What has a bottom at the top?", "leg"),
+                    Riddle("What has a ring but no finger?", "telephone"),
+                    Riddle("What has a foot but no legs?", "snail"),
+                    Riddle("What has a heart that doesn't beat?", "artichoke"),
+                    Riddle("What has a bed but never sleeps?", "river"),
+                    Riddle("What has a face that doesn't frown?", "clock"),]
 
     #Create locations:
     def setup_locations(self):
