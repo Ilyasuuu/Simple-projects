@@ -11,7 +11,7 @@
 
 
 
-
+import random
 import csv
 
 
@@ -25,7 +25,67 @@ def load_file(filename):
 riddles = load_file('riddles.csv')
 
 
-
-
-    
+class Player:
+    def __init__(self, name, floor, room):
+        self.name = name
+        self.floor = floor
+        self.room = room
+        self.inventory = []
         
+    def move(self, direction):
+        if direction == "left":
+            if self.room > 1:
+                self.room -= 1    
+            else:
+                print("You can't go left from here this is the first room.")
+        elif direction == "right":
+            if self.room < 6:
+                self.room += 1
+            else:
+                print("No more rooms in this floor for now.")
+        elif direction == "up":
+            if self.floor < 4:
+                self.floor += 1
+            else:
+                print("You didn't unlock the roof yet.")    
+        elif direction == "down":
+            if self.floor > 1:
+                self.floor -= 1
+            else:
+                print("You are already in the first floor.")      
+
+    def inventory(self, key):
+        self.inventory.append(key)
+        print(f"You got the key for the room {self.room} in the floor {self.floor}.")
+
+class Game:
+    def __init__(self, player, riddles):
+        self.player = Player(name = player, floor = 1, room = 1)
+        self.riddles = riddles
+        self.score = 0
+        self.hints = 3               #3 hints for each roon                                     
+        self.mistakes = 0
+
+    def solve_riddles(self):
+        current_riddle = random.choice(self.riddles)
+        print(f"Riddle : {current_riddle[0]}")
+        player_answer = input("Your answer is :")
+
+        if player_answer.lower() == current_riddle[1].lower():
+            print("Correct answer, you got the key.")
+            self.score += 1
+        else:
+            print('Wrong answer, try again.')
+            self.mistakes += 1    
+
+
+
+
+
+
+
+    def start(self):
+        print("Welcome to the building game, you are in the first floor in the first room.")
+        while True:
+            if 
+            
