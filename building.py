@@ -1,91 +1,108 @@
-#building game
-#the player can move around 4 floors
-#each floor has 5 rooms and each room has five riddles
-#get the key if answer them correctly      #3 mistake lead to restart the game and the room riddle change everytime
-#unlock at least 3 rooms to go to the next floor
-#hints are available            #at first you will be only able to move around the 2 first floors freely unitl you solve at least 6 rooms to move to the 3 floor
-#Ability to move freely between the floors if you want to go back and solve the other rooms.
-#unlock the roof to escape the building
-#time limit for each room
-#score system
 
 
 
-import random
+
+
+
 import csv
-
-
+import random
 
 def load_file(filename):
     with open(filename, mode="r", encoding="utf-8") as file:
         csv_reader = csv.reader(file)    
-        riddles = [(row[0],row[1]) for row in csv_reader]
+        riddles = [(row[0], row[1]) for row in csv_reader if len(row) >= 2]
     return riddles
     
+# Assuming 'riddles.csv' is structured correctly and available
 riddles = load_file('riddles.csv')
 
-
 class Player:
-    def __init__(self, name, floor, room):
+    def __init__(self, name):
         self.name = name
-        self.floor = floor
-        self.room = room
-        self.inventory = []
+        self.floor = 1
+        self.room = 1
+        self.key = []
+    
+    def move_to_next_room(self):
+        self.room += 1  # Always increment the room number
         
-    def move(self, direction):
-        if direction == "left":
-            if self.room > 1:
-                self.room -= 1    
-            else:
-                print("You can't go left from here this is the first room.")
-        elif direction == "right":
-            if self.room < 6:
-                self.room += 1
-            else:
-                print("No more rooms in this floor for now.")
-        elif direction == "up":
-            if self.floor < 4:
-                self.floor += 1
-            else:
-                print("You didn't unlock the roof yet.")    
-        elif direction == "down":
-            if self.floor > 1:
-                self.floor -= 1
-            else:
-                print("You are already in the first floor.")      
+        # Calculate the current floor based on the room number
+        # Assuming there are 5 rooms per floor
+        self.floor = (self.room - 1) // 5 + 1
+        
+        if self.room % 5 == 1:
+            self.add_key(f"key {self.floor - 1}")  # Example: key1, key2, key3, key4, key5
+            print(f"Welcome to floor {self.floor}! Moved to room {self.room}.")
+        else:
+            print(f"Moved to room {self.room} on floor {self.floor}.")
+            
+        
+        
 
-    def inventory(self, key):
-        self.inventory.append(key)
-        print(f"You got the key for the room {self.room} in the floor {self.floor}.")
+
+    def add_key(self, key):
+        self.key.append(key)
+        print(f" You got your: {key}.")
 
 class Game:
-    def __init__(self, player, riddles):
-        self.player = Player(name = player, floor = 1, room = 1)
+    def __init__(self, player_name, riddles):
+        self.player = Player(name=player_name)
         self.riddles = riddles
         self.score = 0
-        self.hints = 3               #3 hints for each roon                                     
+        self.hints = 3  # Assuming this feature will be detailed later
         self.mistakes = 0
+    
+
+    def start(self):    
+        print(f"Welcome {self.player.name}! You're in room {self.player.room} on floor {self.player.floor}.")
+            
+        while self.player.room <= 20:  # Keep playing until all rooms are completed
+            print(f"Entering room {self.player.room}...")
+            self.solve_riddles()  # Attempt to solve riddles for the current room
+                
+                # Check if the game has reached its conclusion
+            if self.player.room > 20:
+                print("Congratulations! You've escaped the building and won the game!")
+                break  # Exit the game loop
+            
+        else:  # This part runs if the loop completed normally, without a break
+            print("Thank you for playing!")
+
+    def select_riddles_for_room(self):
+        # Simplified example of selecting 5 unique riddles for the current room
+        return random.sample(self.riddles, 20)
 
     def solve_riddles(self):
-        current_riddle = random.choice(self.riddles)
-        print(f"Riddle : {current_riddle[0]}")
-        player_answer = input("Your answer is :")
-
-        if player_answer.lower() == current_riddle[1].lower():
-            print("Correct answer, you got the key.")
-            self.score += 1
-        else:
-            print('Wrong answer, try again.')
-            self.mistakes += 1    
-
-
-
-
-
-
-
-    def start(self):
-        print("Welcome to the building game, you are in the first floor in the first room.")
-        while True:
-            if 
+    
+        room_riddles = self.select_riddles_for_room()
+        solved_riddles = 0
             
+        for riddle in room_riddles:
+            print(f"Riddle: {riddle[0]}")
+            player_answer = input("Your answer is: ").strip()
+
+            
+            if player_answer.lower() == riddle[1].lower():
+                print("Correct answer")
+                self.score +1
+                solved_riddles += 1
+                if solved_riddles == 5:
+                    print("Congratulations! You've solved all riddles in this room.")
+                    self.player.move_to_next_room()
+                    break        # Move to the next room or floor logic here
+            else:
+                print('Wrong answer, try again.')
+                self.mistakes += 1
+                if self.mistakes == 3:
+                    self.mistakes = 0  # Reset mistakes for the new set of riddles
+                    print("You've made 3 mistakes. Let's try a new set of riddles.")
+                    break    # Restart the current room's riddles
+            
+                           
+
+
+# Example usage
+player_name = "Player1"
+game = Game(player_name, riddles)
+game.start()
+game.solve_riddles()
