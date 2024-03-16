@@ -49,7 +49,6 @@ class Game:
         self.player = Player(name=player_name)
         self.riddles = riddles
         self.score = 0
-        self.hints = 3  # Assuming this feature will be detailed later
         self.mistakes = 0
     
 
@@ -70,7 +69,7 @@ class Game:
 
     def select_riddles_for_room(self):
         # Simplified example of selecting 5 unique riddles for the current room
-        return random.sample(self.riddles, 20)
+        return random.sample(self.riddles, 5)
 
     def solve_riddles(self):
     
@@ -84,7 +83,7 @@ class Game:
             
             if player_answer.lower() == riddle[1].lower():
                 print("Correct answer")
-                self.score +1
+                self.score +=1
                 solved_riddles += 1
                 if solved_riddles == 5:
                     print("Congratulations! You've solved all riddles in this room.")
@@ -105,4 +104,3 @@ class Game:
 player_name = "Player1"
 game = Game(player_name, riddles)
 game.start()
-game.solve_riddles()
